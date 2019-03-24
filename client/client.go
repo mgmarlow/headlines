@@ -8,7 +8,7 @@ import (
 
 func BuildList(top articles.ArticlesResult) *widgets.List {
 	l := widgets.NewList()
-	l.Title = "Top Stories"
+	l.Title = "Top Stories (NYT)"
 	l.Rows = extractTitles(top.Articles)
 	l.WrapText = true
 	l.SetRect(0, 0, 100, 10)
