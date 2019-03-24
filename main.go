@@ -2,10 +2,11 @@ package main
 
 import (
 	"log"
+
+	ui "github.com/gizak/termui/v3"
 	"github.com/joho/godotenv"
 	"github.com/mgmarlow/headlines/articles"
 	"github.com/mgmarlow/headlines/client"
-	ui "github.com/gizak/termui/v3"
 )
 
 func main() {
@@ -18,9 +19,9 @@ func main() {
 		log.Fatal(err)
 	}
 
- 	if err := ui.Init(); err != nil {
+	if err := ui.Init(); err != nil {
 		log.Fatal("failed to initialize termui")
-	} 
+	}
 	defer ui.Close()
 
 	list := client.BuildList(top)

@@ -2,6 +2,7 @@ package client
 
 import (
 	"strconv"
+
 	"github.com/gizak/termui/v3/widgets"
 	"github.com/mgmarlow/headlines/articles"
 )
@@ -18,7 +19,7 @@ func BuildList(top articles.ArticlesResult) *widgets.List {
 func extractTitles(articles []articles.Article) []string {
 	var titles []string
 	for i, article := range articles {
-		titles = append(titles, "[" + strconv.Itoa(i+1) + "] " + article.Title)
+		titles = append(titles, "["+strconv.Itoa(i+1)+"] "+article.Title)
 	}
 	return titles
 }

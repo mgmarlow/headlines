@@ -6,25 +6,25 @@ import (
 )
 
 type Source struct {
-	ID string
+	ID   string
 	Name string
 }
 
 type Article struct {
-	Source Source
-	Author string
-	Title string
+	Source      Source
+	Author      string
+	Title       string
 	Description string
-	URL string
-	URLToImage string
+	URL         string
+	URLToImage  string
 	PublishedAt string
-	Content string
+	Content     string
 }
 
 type ArticlesResult struct {
-	Status string
+	Status       string
 	TotalResults int
-	Articles []Article
+	Articles     []Article
 }
 
 func GetJson(url string, target interface{}) error {
