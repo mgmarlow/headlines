@@ -6,7 +6,7 @@ import (
 )
 
 type Source struct {
-	Id string
+	ID string
 	Name string
 }
 
