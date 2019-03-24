@@ -1,4 +1,4 @@
-package headlines
+package articles
 
 import (
 	"os"
@@ -8,7 +8,7 @@ func GetTopStories() (ArticlesResult, error) {
 	articles := ArticlesResult{}
 	url := constructURL("https://newsapi.org/v2/top-headlines")
 
-	err := getJson(url, &articles)
+	err := GetJson(url, &articles)
 	if err != nil {
 		return ArticlesResult{}, err
 	}

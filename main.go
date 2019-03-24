@@ -1,9 +1,10 @@
-package headlines
+package main
 
 import (
 	"fmt"
 	"log"
 	"github.com/joho/godotenv"
+	"github.com/mgmarlow/headlines/articles"
 )
 
 func main() {
@@ -11,10 +12,12 @@ func main() {
 		log.Fatal("Failed to load environment.")
 	}
 
-	articles, err := GetTopStories()
+	top, err := articles.GetTopStories()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf(articles.Status)
+	for _, article := range top.Articles {
+		fmt.Println(article.Description)
+	}
 }

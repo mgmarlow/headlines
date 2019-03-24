@@ -1,4 +1,4 @@
-package headlines
+package articles
 
 import (
 	"encoding/json"
@@ -27,7 +27,7 @@ type ArticlesResult struct {
 	Articles []Article
 }
 
-func getJson(url string, target interface{}) error {
+func GetJson(url string, target interface{}) error {
 	r, err := http.Get(url)
 	if err != nil {
 		return err
