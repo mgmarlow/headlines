@@ -19,7 +19,7 @@ func main() {
 	}
 
  	if err := ui.Init(); err != nil {
-		log.Fatal("failed to initialize termui: %v", err)
+		log.Fatal("failed to initialize termui")
 	} 
 	defer ui.Close()
 
