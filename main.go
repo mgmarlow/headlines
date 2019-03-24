@@ -14,6 +14,8 @@ func main() {
 		log.Fatal("Failed to load environment.")
 	}
 
+	// TODO: Send API requests after initializing termUI
+	// for loading indicator
 	top, err := articles.GetTopStories()
 	if err != nil {
 		log.Fatal(err)
@@ -24,12 +26,24 @@ func main() {
 	}
 	defer ui.Close()
 
-	list := client.BuildList(top)
-	ui.Render(list)
+	// Prepare all widgets for dashboard
+	widgets := []client.Widget{
+		client.NewTopStoriesWidget(top),
+	}
 
+	// Initial Render
+	for _, widget := range widgets {
+		ui.Render(widget.GetElement())
+	}
+
+	// Event Handling
 	for e := range ui.PollEvents() {
-		if e.Type == ui.KeyboardEvent {
+		if e.ID == "q" || e.ID == "<C-c>" {
 			break
+		}
+
+		for _, widget := range widgets {
+			widget.HandleEvents(e, ui.Render)
 		}
 	}
 }
