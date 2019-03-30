@@ -5,22 +5,31 @@ import (
 
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
-	"github.com/mgmarlow/headlines/articles"
+	"github.com/mgmarlow/headlines/api"
 )
 
 type topStoriesWidget struct {
-	element *widgets.List
+	selectedArticle int
+	stories         api.ArticlesResult
+	list            *widgets.Paragraph
+	description     *widgets.Paragraph
 }
 
-func NewTopStoriesWidget(topStories articles.ArticlesResult) *topStoriesWidget {
+// NewTopStoriesWidget constructs the "Top Stories" widget
+func NewTopStoriesWidget(topStories api.ArticlesResult) *topStoriesWidget {
+	description := buildWidget(topStories.Articles[0])
+	description.Title = buildTitle(0, topStories.TotalResults)
+
 	return &topStoriesWidget{
-		element: buildList(topStories),
+		selectedArticle: 0,
+		stories:         topStories,
+		description:     description,
 	}
 }
 
-// GetElement allows element access for Widget interface
-func (w *topStoriesWidget) GetElement() ui.Drawable {
-	return w.element
+// Render renders all widget using ui.Render
+func (w *topStoriesWidget) Render(renderer func(...ui.Drawable)) {
+	renderer(w.description)
 }
 
 // HandleEvents provides keyboard event handling. ui.Render is passed
@@ -28,31 +37,35 @@ func (w *topStoriesWidget) GetElement() ui.Drawable {
 // element is changed.
 func (w *topStoriesWidget) HandleEvents(event ui.Event, renderer func(...ui.Drawable)) {
 	switch event.ID {
-	case "j", "<Down>":
-		w.element.ScrollDown()
-		renderer(w.element)
-		break
-	case "k", "<Up>":
-		w.element.ScrollUp()
-		renderer(w.element)
+	case "<Tab>":
+		w.selectedArticle++
+		if w.selectedArticle >= w.stories.TotalResults {
+			w.selectedArticle = 0
+		}
+		w.description = buildWidget(w.stories.Articles[w.selectedArticle])
+		w.description.Title = buildTitle(w.selectedArticle, w.stories.TotalResults)
+		w.Render(renderer)
 		break
 	}
 }
 
-func buildList(top articles.ArticlesResult) *widgets.List {
-	l := widgets.NewList()
-	l.Title = "Top Stories (NYT)"
-	l.Rows = extractTitles(top.Articles)
-	l.WrapText = true
-	l.SetRect(0, 0, 100, 10)
-	return l
+func buildWidget(article api.Article) *widgets.Paragraph {
+	p := widgets.NewParagraph()
+	p.Text = article.Title + "\n\n" + article.Description + "\n\n" + article.URL
+	p.SetRect(0, 0, 100, 10)
+	return p
 }
 
-func extractTitles(articles []articles.Article) []string {
-	var titles []string
-	for i, article := range articles {
-		titles = append(titles, "["+strconv.Itoa(i+1)+"] "+article.Title)
-		titles = append(titles, "    - "+article.URL)
+func buildTitle(selected, total int) string {
+	var title string
+
+	for i := 0; i < total; i++ {
+		if i == selected {
+			title = title + "[" + strconv.Itoa(i+1) + "] "
+		} else {
+			title = title + " " + strconv.Itoa(i+1) + "  "
+		}
 	}
-	return titles
+
+	return title
 }

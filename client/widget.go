@@ -7,6 +7,6 @@ import (
 // Widget is the top-level interface for all widgets
 // that will be added to the headlines dashboard.
 type Widget interface {
-	GetElement() ui.Drawable
+	Render(renderer func(...ui.Drawable))
 	HandleEvents(event ui.Event, renderer func(...ui.Drawable))
 }

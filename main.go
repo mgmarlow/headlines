@@ -5,7 +5,7 @@ import (
 
 	ui "github.com/gizak/termui/v3"
 	"github.com/joho/godotenv"
-	"github.com/mgmarlow/headlines/articles"
+	"github.com/mgmarlow/headlines/api"
 	"github.com/mgmarlow/headlines/client"
 )
 
@@ -16,7 +16,7 @@ func main() {
 
 	// TODO: Send API requests after initializing termUI
 	// for loading indicator
-	top, err := articles.GetTopStories()
+	top, err := api.GetTopStories()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func main() {
 
 	// Initial Render
 	for _, widget := range widgets {
-		ui.Render(widget.GetElement())
+		widget.Render(ui.Render)
 	}
 
 	// Event Handling
