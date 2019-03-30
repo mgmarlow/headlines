@@ -11,7 +11,21 @@ Top news stories straight to the terminal.
 
 ## Usage
 
+Grab an API key from the [News API](https://newsapi.org/) and drop it
+in a `.env` file at the root of the project.
+
+```
+# .env
+NEWS_API_KEY=<YOUR KEY HERE>
+```
+
+Once that's done, you can successfully build and run the project:
+
 ```
 go build
 ./headlines.exe
 ```
+
+### Controls
+
+Use `<Tab>` to cycle between top stories.
