@@ -5,7 +5,6 @@ import (
 
 	ui "github.com/gizak/termui/v3"
 	"github.com/joho/godotenv"
-	"github.com/mgmarlow/headlines/api"
 	"github.com/mgmarlow/headlines/client"
 )
 
@@ -14,26 +13,23 @@ func main() {
 		log.Fatal("Failed to load environment.")
 	}
 
-	// TODO: Send API requests after initializing termUI
-	// for loading indicator
-	top, err := api.GetTopStories()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	if err := ui.Init(); err != nil {
 		log.Fatal("failed to initialize termui")
 	}
 	defer ui.Close()
 
+	client.LoadingComponent().Render(ui.Render)
+
 	// Prepare all widgets for dashboard
-	widgets := []client.Widget{
-		client.NewTopStoriesWidget(top),
+	components := []client.Component{
+		client.TopStoriesComponent(),
 	}
 
+	ui.Clear()
+
 	// Initial Render
-	for _, widget := range widgets {
-		widget.Render(ui.Render)
+	for _, c := range components {
+		c.Render(ui.Render)
 	}
 
 	// Event Handling
@@ -42,8 +38,8 @@ func main() {
 			break
 		}
 
-		for _, widget := range widgets {
-			widget.HandleEvents(e, ui.Render)
+		for _, c := range components {
+			c.HandleEvents(e, ui.Render)
 		}
 	}
 }
